@@ -5,6 +5,7 @@
 #include <map>
 #include <utility>
 #include <math.h>
+#include <time.h>
 
 using namespace std;
 
@@ -12,8 +13,8 @@ using namespace std;
 Input: coordenadas de los dos puntos
 Return: la distancia
 */
-float getDistancia(int x1, int y1, int x2, int y2){
-	int h1, h2;
+float getDistancia(float x1, float y1, float x2, float y2){
+	float h1, h2;
 	float dist;
 	h1 = abs(x1-x2);
 	h2 = abs(y1-y2);
@@ -48,7 +49,7 @@ int getPuntaje(vector<pair<string, float> >& solucion, map<string, int>& puntaje
 Input: Coordenadas x,y del punto fijo, map de los POI/Hoteles, vector de solucion
 Retorna: un elemento de solución (POI, distancia)
 */
-pair<string, float> getPuntoMasCercano(int x, int y, map<string, pair<int, int> > punto, vector<pair<string, float> > camino){
+pair<string, float> getPuntoMasCercano(float x, float y, map<string, pair<float, float> > punto, vector<pair<string, float> > camino){
 
 	float min = 99999.;
 	string min_s = "";
@@ -68,7 +69,7 @@ pair<string, float> getPuntoMasCercano(int x, int y, map<string, pair<int, int> 
 Input: Coordenadas x,y del punto fijo, map con los hoteles *hoteles Inicio/Fin, no Extras*
 Retorna: un elemento de solución (POI, distancia)
 */
-pair<string, float> getDistanciaUltimoHotel(int x, int y, map<string, pair<int, int> > hoteles){
+pair<string, float> getDistanciaUltimoHotel(float x, float y, map<string, pair<float, float> > hoteles){
 	auto i = hoteles.end();
 	i--;
 	return make_pair("h1", getDistancia(x,y,get<0>(i->second), get<1>(i->second))) ;
@@ -78,8 +79,8 @@ pair<string, float> getDistanciaUltimoHotel(int x, int y, map<string, pair<int, 
 /*
 
 */
-void actualizarDistancias(vector<pair<string, float> >& sol_actual, map<string, pair<int, int> > POI, map<string, pair<int, int> > Hoteles, 
-	map<string, pair<int, int> > InFn, map<string, pair<int, int> > HPOI, vector<float>& tiempo_trip){
+void actualizarDistancias(vector<pair<string, float> >& sol_actual, map<string, pair<float, float> > POI, map<string, pair<float, float> > Hoteles, 
+	map<string, pair<float, float> > InFn, map<string, pair<float, float> > HPOI, vector<float>& tiempo_trip){
 
 	auto ItActual1 = sol_actual.begin();
 	float dist1 = 0;
@@ -157,8 +158,8 @@ un map de todos los POI/Hoteles extras, la vida de los elementos tabus.
 Retorna: un vector solucion con 0 o mas puntos agragados.
 */
 bool tabuInsert(vector<pair<string, float> >& sol_actual, 
-	map<string, int>& lista_tabu, map<string, pair<int, int> > POI, map<string, pair<int, int> > Hoteles, 
-	map<string, pair<int, int> > InFn, map<string, pair<int, int> > HPOI, int vida_tabu, vector<float>& tiempo_trip, vector<float> Ttrips){
+	map<string, int>& lista_tabu, map<string, pair<float, float> > POI, map<string, pair<float, float> > Hoteles, 
+	map<string, pair<float, float> > InFn, map<string, pair<float, float> > HPOI, int vida_tabu, vector<float>& tiempo_trip, vector<float> Ttrips){
 
 	auto ItActual1 = sol_actual.begin();
 	auto ItActual2 = ItActual1;
@@ -223,8 +224,8 @@ un map de todos los POI/Hoteles extras, la vida de los elementos tabus.
 Retorna:
 */
 bool tabuDelete(vector<pair<string, float> >& sol_actual, 
-	map<string, int>& lista_tabu, map<string, pair<int, int> > POI, map<string, pair<int, int> > Hoteles, map<string, pair<int, int> > InFn, 
-	map<string, int> POI_v, map<string, pair<int, int> > HPOI, int vida_tabu, vector<float> tiempo_trip){
+	map<string, int>& lista_tabu, map<string, pair<float, float> > POI, map<string, pair<float, float> > Hoteles, map<string, pair<float, float> > InFn, 
+	map<string, int> POI_v, map<string, pair<float, float> > HPOI, int vida_tabu, vector<float> tiempo_trip){
 
 	auto ItActual1 = sol_actual.begin();
 	vector<pair<string, int> > puntos;
@@ -288,8 +289,8 @@ Input: Vector de solucion inicial, map de los POIS, map de los Hoteles extras, m
 Retorna: un vector con los tiempos de cada trip
 *incompleto*
 */
-vector<float> getTiemposTrips(vector<pair<string, float> >& sol_actual, map<string, pair<int, int> > POI, map<string, 
-	pair<int, int> > Hoteles, map<string, pair<int, int> > InFn){
+vector<float> getTiemposTrips(vector<pair<string, float> >& sol_actual, map<string, pair<float, float> > POI, map<string, 
+	pair<float, float> > Hoteles, map<string, pair<float, float> > InFn){
 
 	vector<float> tiempos;
 	for(auto i = sol_actual.begin(); i!= sol_actual.end(); i++){
@@ -315,8 +316,8 @@ A una solucion especifica, se intercambian 2 POIs de posicion
 Retorna: un vector solucion con 2 elementos cambiados
 */
 bool tabuPOISwap(vector<pair<string, float> >& sol_actual, 
-	map<string, int>& lista_tabu, map<string, pair<int, int> > POI, map<string, 
-	pair<int, int> > Hoteles, map<string, pair<int, int> > InFn, map<string, pair<int, int> > HPOI, int vida_tabu, vector<float>& tiempo_trip){
+	map<string, int>& lista_tabu, map<string, pair<float, float> > POI, map<string, 
+	pair<float, float> > Hoteles, map<string, pair<float, float> > InFn, map<string, pair<float, float> > HPOI, int vida_tabu, vector<float>& tiempo_trip){
 
 	vector<pair<string, float> > sol_eval = sol_actual;
 	vector<float> tiempo_trip_eval = tiempo_trip;
@@ -371,8 +372,8 @@ bool tabuPOISwap(vector<pair<string, float> >& sol_actual,
 
 
 bool tabuHotelSwap(vector<pair<string, float> >& sol_actual, 
-	map<string, int>& lista_tabu, map<string, pair<int, int> > POI, map<string, 
-	pair<int, int> > Hoteles, map<string, pair<int, int> > InFn, map<string, pair<int, int> > HPOI, int vida_tabu, vector<float>& tiempo_trip){
+	map<string, int>& lista_tabu, map<string, pair<float, float> > POI, map<string, 
+	pair<float, float> > Hoteles, map<string, pair<float, float> > InFn, map<string, pair<float, float> > HPOI, int vida_tabu, vector<float>& tiempo_trip){
 
 	vector<pair<string, float> > sol_eval = sol_actual;
 	vector<float> tiempo_trip_eval = tiempo_trip;
@@ -444,14 +445,16 @@ int main(int argc, char const *argv[])
 {
 	ios::sync_with_stdio(false);
 	srand (time(NULL));
+	clock_t tStart = clock();
 
 	//Lectura del archivo por referencia
 	//Se sigue el formato, nada que comentar ._.
-	int n,h,d,x,y,sn, aux;
+	int n,h,d,sn, aux;
+	float x,y;
 	string in;
 	float auxf, Tmax;
 	vector<float> Ttrips;
-	map<string, pair<int, int> > Hoteles, POI, InFn, HPOI;
+	map<string, pair<float, float> > Hoteles, POI, InFn, HPOI;
 	map<string, int> POI_v;
 	vector<float> tiempo_trip;
 
@@ -642,7 +645,7 @@ int main(int argc, char const *argv[])
 
 		cout << "\n";
 	}
-
+	printf("Time taken: %.2fs\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
 
 	return 0;
 }
